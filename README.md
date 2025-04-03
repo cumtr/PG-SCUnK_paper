@@ -10,7 +10,7 @@ This directory contains the scripts used to produce and analyse the results pres
 
 `1_TaurinePangenome/` - Snakemake pipeline to generate the Taurine pangenome graph analysed in the paper.
 
-`2_RangeParamPGGB/` - Snakemake pipeline used to produce various graph with different pggb parameters for the chromosome 13. 
+`2_RangeParamPGGB/` - Snakemake pipeline used to produce various graph with different pggb parameters for the chromosome 13 of the taurine pangenome. 
 
 `3_RunPG-SCUnK/`- Scripts used to run *PG-SCUnK* on all the graph studided, as well as summarise the results.  
 
