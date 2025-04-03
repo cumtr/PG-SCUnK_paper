@@ -1,0 +1,73 @@
+###################################################################################
+#                                                                                 #
+#       Pipeline to assemble a panGenome from the curated list of Assemblies      #
+#                                                                                 #
+###################################################################################
+
+configfile: "config.yaml" 
+
+###################################################################################
+
+                        ##### Snakemake rules #####
+
+###################################################################################
+
+rule all:
+        input:
+                expand("results/1_BuildPanGenome/{CHR}.pggb.gfa", CHR=config["ListCHR"]),
+                expand("results/2_EvalPanGenome/{CHR}.pggb.PG-SCUnK.done", CHR=config["ListCHR"])
+
+
+rule pggb_construct:
+    input:
+        fasta = "0_DATA/{chr}.fa.gz"
+    output:
+        og = 'results/1_BuildPanGenome/{chr}.pggb.og',
+        gfa = 'results/1_BuildPanGenome/{chr}.pggb.gfa'
+    threads: 30
+    resources:
+        runtime = '360h',
+        scratch = '100G'
+    params:
+        _dir = lambda wildcards, output: Path(output[0]).parent,
+        divergence = 98,
+        min_match = 31,  
+        segment_length = 75000
+    shell:
+        '''
+        pggb -i {input.fasta} -o {params._dir} -t {threads} \
+        --skip-viz --temp-dir  \
+        -s {params.segment_length} -k {params.min_match} -p {params.divergence} \
+        --skip-viz --temp-dir  $TMPDIR \
+        -T {threads} --resume
+
+        mv results/1_BuildPanGenome/{wildcards.chr}*.og {output.og}
+        mv results/1_BuildPanGenome/{wildcards.chr}*.gfa {output.gfa}
+        '''
+
+
+rule PG-SCUnK_run:
+    input:
+        gfa = 'results/1_BuildPanGenome/{chr}.pggb.gfa'
+    output:
+        'results/2_EvalPanGenome/{chr}.pggb.PG-SCUnK.done'
+    conda:
+        "envs/tools.yaml"
+    threads: 1
+    resources:
+        mem = 40G,
+        runtime = '24h',
+        scratch = '200G'
+    params:
+        k = 100
+    shell:
+        '''
+        ~/WORK/TOOLS/PG-SCUnK/scripts/GFA2HaploFasta.bash -p {input.gfa} -t $TMPDIR -o $TMPDIR/{wildcards.chr} -@ {threads}
+        ~/WORK/TOOLS/PG-SCUnK/PG-SCUnK -p {input.gfa} -a $TMPDIR/{wildcards.chr} -o results/2_EvalPanGenome/Chr_{wildcards.chr}.pggb.PG-SCUnK -t $TMPDIR -k {params.k}
+        touch {output}
+        '''
+
+
+
+
+

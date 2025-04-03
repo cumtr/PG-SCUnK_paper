@@ -1,0 +1,20 @@
+workflow._singularity_args = f'-B $TMPDIR'
+
+include: 'snakepit/pangenome_construction_2.smk'
+configfile: "config_chr13.yaml"
+
+def get_files():
+    targets = []
+    
+    targets.extend(expand('graphs_Cattle/s{s}_k{k}_p{p}/{chromosome}.pggb.gfa',s=config['s'],k=config['k'],p=config['p'],chromosome=13))
+    targets.extend(expand('graphs_Cattle/s{s}_k{k}_p{p}/{chromosome}.pggb.PG-SCUnK.done',s=config['s'],k=config['k'],p=config['p'],chromosome=13))
+    print(targets)
+    return targets
+
+################################################
+
+rule all:
+    input:
+        expand('graphs_Cattle/s{s}_k{k}_p{p}/{chromosome}.pggb.gfa',s=config['s'],k=config['k'],p=config['p'], chromosome=13),
+        expand('graphs_Cattle/s{s}_k{k}_p{p}/{chromosome}.pggb.PG-SCUnK.done',s=config['s'],k=config['k'],p=config['p'], chromosome=13)
+

@@ -1,0 +1,31 @@
+fastafile: 'graphs_Cattle/13.fa.gz'
+
+# trimmed_assemblies: '/cluster/work/pausch/sotiria/SV_saturation_pangenome/graphs_HSchr17'
+# assembly_path: '/cluster/work/pausch/sotiria/SV_saturation_pangenome/graphs_HSchr17'
+# repeat_path: '/cluster/work/pausch/sotiria/SV_saturation_pangenome/masking'
+
+s:
+  - '5000'
+  - '10000'
+  - '25000'
+  - '50000'
+  - '75000'
+  - '80000'
+  - '85000'
+  - '90000'
+  - '100000'
+
+k:
+  - '19'
+  - '25'
+  - '31'
+
+p:
+  - '70'
+  - '80'
+  - '95'
+  - '95.5'
+  - '96'
+  - '98'
+  - '99'
+  - '99.5'
