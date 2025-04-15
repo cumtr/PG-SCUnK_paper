@@ -1,6 +1,7 @@
 # PG-SCUnK_paper
 
 This directory contains the scripts used to produce and analyse the results presented in : *PG-SCUnK: measuring pangenome graph representativeness using single-copy and universal K-mers*.
+The repostory with the workflow `PG-SCUnK` is here : https://github.com/cumtr/PG-SCUnK
 
 # 
 
